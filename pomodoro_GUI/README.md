@@ -6,7 +6,7 @@ Based on tkinter library on Python3
 
 4 periods of 25 minutes of Work.
 
-3 short break opf 5 minutes and one long brake of 20 minutes.
+3 short brakes of 5 minutes each and one long brake of 20 minutes.
 
 For a total Amount of work of 1.50 hours of total work.
 
