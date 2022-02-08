@@ -1,8 +1,8 @@
-#Time Management System App
+# Time Management System App
 
 Based on tkinter library on Python3
 
-#Functionality
+# Functionality
 
 4 WORK periods of 25 minutes of work.
 
@@ -12,24 +12,24 @@ For a total Amount of work of 1.50 hours of total work.
 
 2 buttons: one to start countdown, the other to reset it.
 
-#Pomodoro Cycle Illustrated
+# Pomodoro Cycle Illustrated
 
 ![alt text](https://miro.medium.com/max/1400/1*J-df6qhTu_1PVd-MmMI_EQ.png)
 
 
-#Start Screen 
+# Start Screen 
 
 ![alt text](./screenshots/start_cycle.png)
 
 click on the "start" button to fire count down.
 
-#Work Screen 
+# Work Screen 
 
 ![alt text](./screenshots/work_cycle.png)
 
 after each Work period one check mark is displayed.
 
-#Brake Screen
+# Brake Screen
 
 ![alt text](./screenshots/brake_cycle.png)
 
