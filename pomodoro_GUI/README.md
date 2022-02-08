@@ -14,7 +14,7 @@ For a total Amount of work of 1.50 hours of total work.
 
 # Pomodoro Cycle Illustrated
 
-![alt text](https://miro.medium.com/max/1400/1*J-df6qhTu_1PVd-MmMI_EQ.png)
+![alt text](https://miro.medium.com/max/1400/1*J-df6qhTu_1PVd-MmMI_EQ.png, "Image message for test")
 
 
 # Start Screen 
