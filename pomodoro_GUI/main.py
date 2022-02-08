@@ -40,8 +40,6 @@ def start_timer():
     elif REPS%2==0:
         main_title.config(text="Work",fg=RED)
         count_down(WORK_MIN*60)
-        print(window.winfo_height())
-        print(window.winfo_width())
     else:
         #five minute brake
         main_title.config(text="Brake",fg=GREEN)
@@ -65,7 +63,7 @@ def count_down(count):
         else:
             main_title.config(text="Pomodoro Complete ",fg=GREEN)
 # ---------------------------- UI SETUP ------------------------------- #
-
+#GUI
 window = Tk()
 window.title("Pomodoro GUI")
 print(window.winfo_rgb(color=RED))
