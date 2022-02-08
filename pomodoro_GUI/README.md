@@ -34,9 +34,10 @@ After each Work period one check mark is displayed.
 
 # Brake Screen
 
+Time to relax before more work
+
 ![alt text](./screenshots/brake_cycle.png)
 
-Time to relax before more work
 
 # Reset
 
