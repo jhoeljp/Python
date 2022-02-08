@@ -4,7 +4,7 @@ Based on tkinter library on Python3
 
 # Functionality
 
-4 WORK periods of 25 minutes of work.
+4 periods of 25 minutes of Work.
 
 3 short break opf 5 minutes and one long brake of 20 minutes.
 
@@ -19,7 +19,7 @@ For a total Amount of work of 1.50 hours of total work.
 
 # Start Screen 
 
-![alt text](./screenshots/start_cycle.png)
+![alt text](./screenshots/start_timer.png)
 
 click on the "start" button to fire count down.
 
@@ -37,4 +37,4 @@ Time to relax before more work
 
 #Reset
 
-click on the "reset" button to go back to the Start Screen
+Click on the "reset" button to go back to the Start Screen
