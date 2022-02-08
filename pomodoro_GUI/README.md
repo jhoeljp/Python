@@ -27,18 +27,18 @@ Click on the "start" button to fire count down.
 
 # Work Screen 
 
-After each Work period one check mark is displayed.
+After each Work period, check marks are shown to keep progress.
 
 ![alt text](./screenshots/work_cycle.png)
 
 
 # Brake Screen
 
-Time to relax before more work
+Time to relax before more work.
 
 ![alt text](./screenshots/brake_cycle.png)
 
 
 # Reset
 
-Click on the "reset" button to go back to the Start Screen
+Click on the "reset" button to go back to the Start Screen.
