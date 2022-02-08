@@ -19,15 +19,18 @@ For a total Amount of work of 1.50 hours of total work.
 
 # Start Screen 
 
+Click on the "start" button to fire count down.
+
 ![alt text](./screenshots/start_timer.png)
 
-click on the "start" button to fire count down.
+
 
 # Work Screen 
 
+After each Work period one check mark is displayed.
+
 ![alt text](./screenshots/work_cycle.png)
 
-after each Work period one check mark is displayed.
 
 # Brake Screen
 
@@ -35,6 +38,6 @@ after each Work period one check mark is displayed.
 
 Time to relax before more work
 
-#Reset
+# Reset
 
 Click on the "reset" button to go back to the Start Screen
