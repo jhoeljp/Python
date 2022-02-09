@@ -6,7 +6,7 @@ Built on tkinter library on Python3
 
 Write information to save in file. 
 
-![alt text](./screenshots/start_timer.png)
+![alt text](./screenshots/main_screen.png)
 
 
 # Functionality
