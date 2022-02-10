@@ -19,13 +19,10 @@ symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
 def generate_password():
     password_list = ""
     #random amount of input types
-    nr_letters = random.randint(3, 5)
-    nr_symbols = random.randint(2, 4)
-    nr_numbers = random.randint(2, 4)
     #select number of randoms
-    password_list += "".join(random.choice(letters) for char in range(nr_letters))
-    password_list += "".join(random.choice(symbols) for char in range(nr_symbols))
-    password_list += "".join(random.choice( numbers) for char in range(nr_numbers))
+    password_list += "".join(random.choice(letters) for char in range(random.randint(3, 5)))
+    password_list += "".join(random.choice(symbols) for char in range(random.randint(2, 4)))
+    password_list += "".join(random.choice( numbers) for char in range(random.randint(2, 4)))
     #shuffle eandom characters
     password_list = list(password_list)
     random.shuffle(password_list)
