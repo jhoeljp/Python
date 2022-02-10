@@ -1,14 +1,19 @@
 #dependencies
+from ast import Pass
+from ctypes import alignment
+from sqlite3 import threadsafety
 from tkinter import *
 from tkinter import messagebox
 import random
+import json
+import os 
 #global variables
 BG = "#FFEDD3"
 FONT_COLOR = "#FC4F4F"
 BAR_COLOR = "#FE8F8F"
 EMAIL = "default@gmail.com"
 PASSWORD = "12345"
-PASSWORD_FILE = "passwords.csv"
+PASSWORD_FILE = "passwords.json"
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 #password constants
@@ -27,42 +32,92 @@ def generate_password():
     password_list = list(password_list)
     random.shuffle(password_list)
     password_list = ''.join(password_list)
-    # print(f"Your password is: {password_list}")
 
     #paste password on entry box and copy to clipboard
     input_bar["Password"].delete(0,END)
     input_bar["Password"].insert(0,password_list)
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
-
+def try_save_info(new_data,website):
+        with open(PASSWORD_FILE,"r") as file:
+            #load old data
+            json_obj = json.load(file)
+            #load up new data
+            json_obj[website] = new_data[website]
+        with open(PASSWORD_FILE,"w") as file:
+            #save new data
+            json.dump(json_obj,file,indent=4)
+            # file.write(line)
+            #wipe out clear Website and password
+def try_fetch_info(website):
+        with open(PASSWORD_FILE,"r") as file:
+            #load old data
+            json_obj = json.load(file)
+            #fetch match for website
+            #raises exception is match doesnt exist 
+            return json_obj[website]
 def save_info():
     global input_bar
     #obtain input entries from the entrys' dictionary 
     tmp = [input_bar[i].get() for i,v in input_bar.items()]
     line = ",".join(tmp) + "\n"
     #pop-up confirmation 
-    website =input_bar["Website"].get()
+    website =input_bar["Website"].get().lower()
     email = input_bar["Email/Username"].get()
     password = input_bar["Password"].get()
+    new_data = {
+        website:{
+            "Email/Username":email,
+        "Password":password
+        }   
+    }
     #show warning message 
     if website== "" or password=="" or email=="":
         messagebox.showinfo(title="Oops",message="Oops!\n\nDon't leave any fields empty...")
     else:
-        is_ok_flag = messagebox.askokcancel(title=website,message=f"These are the details entered:\nEmail: {email}\nPassword:{password}\nIs it OK to save?")
-        if is_ok_flag:
-            #write new line to save file 
-            with open(PASSWORD_FILE,"a") as file:
-                file.write(line)
-            #wipe out clear Website and password
+        #write new line to save file 
+        try:
+            try_save_info(new_data,website)
+        except FileNotFoundError as e:
+            #create blank json file
+            with open(PASSWORD_FILE,"w") as file:
+                file.write("{}")
+            #try again with new file 
+            try_save_info(new_data,website)
+        finally:
             input_bar["Website"].delete(0,END)
             input_bar["Password"].delete(0,END)
+def fetch_password():
+    global input_bar
+    website =input_bar["Website"].get().lower()
+
+    if website == "":
+        messagebox.showinfo("Invalid website.")
+    else:
+        #fetch json file for website password 
+        try:
+            data = try_fetch_info(website)
+        #avoid error of unexistant file
+        #catch exception is match doesnt exist as well 
+        except FileNotFoundError as e:
+            messagebox.showinfo(title="FileNotFoundError", message="Oops nothing to see, File is empty.")
+        except KeyError as e:
+            messagebox.showinfo(title = "KeyError",message=f"Oops {website} password is not stored.")
+        else:
+            #must have match to execute without exception 
+            email = data["Email/Username"]
+            password =  data["Password"]
+            #display saved data to user 
+            messagebox.showinfo(title="Success",message=f"Email: {email}\nPassword:{password}")
+                
+
 
 # ---------------------------- UI SETUP FUNCTIONS ------------------------------- #
 
 def create_labels(text_labels,acc):
     for i,_ in text_labels.items():
-        tmp_label = Label(text=i,font=("Courier",20,"bold"),bg=BG,fg=FONT_COLOR,)
-        tmp_label.config(padx=10,pady=20)
+        tmp_label = Label(text=i,font=("Courier",20,"bold"),bg=BG,fg=FONT_COLOR,justify=CENTER)
+        tmp_label.config(padx=0,pady=15)
         tmp_label.grid(column=0,row=acc)
         acc+=1
         text_labels[i] = tmp_label
@@ -70,12 +125,12 @@ def create_labels(text_labels,acc):
 
 def create_bars(input_bar,acc):
     #acc+1(0) is starting row on grid
-    bar_widths_list = [35,35,21]
+    bar_widths_list = [19,36,19]
     for i,_ in input_bar.items():
         tmp_bar = Entry(text=i)
         tmp_bar.config(width=bar_widths_list[acc],bg=BAR_COLOR,fg="#000000")
         #expand the bar to 2 columns
-        if bar_widths_list[acc] > min(bar_widths_list):
+        if bar_widths_list[acc] > max(bar_widths_list)-1:
             tmp_bar.grid(column=1,row=acc+1,columnspan=2)
         else: 
             tmp_bar.grid(column=1,row=acc+1)
@@ -88,7 +143,7 @@ def create_bars(input_bar,acc):
 window = Tk()
 window.title("PassWord Manager")
 window.minsize(width=200,height=200)
-window.config(padx=50,pady=50,bg=BG)
+window.config(padx=30,pady=30,bg=BG)
 #declare picture canvas
 canvas = Canvas(window,width=200,height=200,highlightthickness=0,bg=BG)
 logo_img = PhotoImage(file='logo.png')
@@ -102,6 +157,10 @@ text_labels = create_labels(text_labels=text_labels,acc=1)
 input_bar = {"Website":"",
             "Email/Username":"","Password":""}
 input_bar = create_bars(input_bar=input_bar,acc=0)
+#Search password button 
+Search_bt = Button(text="Search")
+Search_bt.config(bg=BAR_COLOR,highlightbackground=BG,command=fetch_password)
+Search_bt.grid(column=2,row=1)
 #Add Buttom
 Add_bt = Button(text="Add")
 Add_bt.config(width=35,bg=BAR_COLOR,highlightbackground=BG,command=save_info)
