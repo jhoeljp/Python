@@ -1,7 +1,4 @@
 #dependencies
-from ast import Pass
-from ctypes import alignment
-from sqlite3 import threadsafety
 from tkinter import *
 from tkinter import messagebox
 import random
