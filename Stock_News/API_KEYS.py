@@ -1,0 +1,2 @@
+STOCK_API_KEY = "key1"
+NEWS_API_KEY = "key2"
