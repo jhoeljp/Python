@@ -4,11 +4,10 @@ Display relevant price changes of stock using Stock API (alphavantage.co).
 
 Showcase relevant news of the company using API (newsapi.org).
 
+Send text message when Stock price change is significant enough using Twilio API (twilio.com)
+
 Hide API keys in API_KEYS.py as regular strings.
 
-## To Do 
-
-Send Sample Output to custom email w/ stmplib. 
 
 ## Sample Output
 
