@@ -1,9 +1,14 @@
-STOCK = "TSLA"
-COMPANY_NAME = "Tesla Inc"
+STOCK = "MSFT"
+COMPANY_NAME = "Microsoft Corporation"
+PRICE_CHANGE = 5
 #DEPENDECIES
 import requests
 import datetime as dt
-from API_KEYS import STOCK_API_KEY, NEWS_API_KEY
+import os
+#contains API KEYS and phone numbers
+from API_KEYS import *
+# Download the twilio-python library from twilio.com/docs/libraries/python
+from twilio.rest import Client
 
 def price_changed():
     ## STOCK PRICE API -> https://www.alphavantage.co
@@ -29,7 +34,6 @@ def price_changed():
     #get prices
     price_2days_ago = float(data[before_yesterday_date]['4. close'])
     price_1days_ago = float(data[yesterdays_date]['4. close'])
-    # print(f"price_2days_ago: {price_2days_ago} & price_1days_ago: {price_1days_ago}")
 
     #Calculate percentage price difference 
     increase = price_1days_ago - price_2days_ago
@@ -40,7 +44,7 @@ def price_changed():
     percent = abs(increase_percent)
     percent_str = "%.2f"%(percent)
     delta = ""
-    if percent >=5:
+    if percent >= PRICE_CHANGE:
         if increase > 0:
             delta = f"{STOCK}: 🔺{percent_str}%"
         else: 
@@ -70,18 +74,28 @@ def get_news():
             message = f"Headline: {headline}\n\nBrief: {brief}\n\nURL: {news_url}"
     return message
 
-def send_email_update(price,msg):
-    print(price)
-    print(msg)
+def send_text_message(price,msg):
+    # Find these values at https://twilio.com/user/account
+    # To set up environmental variables, see http://twil.io/secure
+    account_sid = TWILIO_ACCOUNT_SID
+    auth_token = TWILIO_AUTH_TOKEN
+
+    client = Client(account_sid, auth_token)
+    #RECEIVER number must be a valid and verified number on your twilio account.
+    message = client.api.account.messages.create(
+        to=RECEIVER_PHONE,
+        from_=MY_TWILIO_PHONE,
+        body=f"{price}\n{msg}")
+    print(message.status)
 
 #START ---------------------------------
 #If the stock price change significantly
 #lets get some News 
-price_chage = price_changed()
-if price_chage:
+price_change = price_changed()
+if price_change:
     msg = get_news()
     #if there is news on the company send email update to user
-    if msg: send_email_update(price_chage,msg)
-    else: print("No News to report at the moment.")
+    if msg: send_text_message(price_change,msg)
+    else: print(f"No {COMPANY_NAME} news to report at the moment.")
 else:
-    print("No Significant price change Today! ")
+    print(f"No significant price change today for {STOCK}! ")

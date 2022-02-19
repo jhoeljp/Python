@@ -1,2 +1,6 @@
 STOCK_API_KEY = "key1"
 NEWS_API_KEY = "key2"
+TWILIO_ACCOUNT_SID = "account_sid"
+TWILIO_AUTH_TOKEN = "auth_token"
+MY_TWILIO_PHONE = "+number1"
+RECEIVER_PHONE = "+number1"
