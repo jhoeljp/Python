@@ -8,6 +8,12 @@ Implement GUI with Tkinter library
 
 ![alt text](./images/template_GUI.png)
 
+## Feb/20
+
+Implement Bubble Sort and displayed results 
+
+![alt text](./images/bubble_sort.png)
+
 # Sorting Algorithms
 1) Merge Sort
 2) Heap Sort 
@@ -17,4 +23,4 @@ Implement GUI with Tkinter library
 # Development Steps 
 1) Make GUI to visualize and components functionality
 2) Sorting algorithm implementation 1 through 4 
-3) New Array: Random, Nearly Sorted, Sorted
+3) New Array: Random, Nearly Sorted
