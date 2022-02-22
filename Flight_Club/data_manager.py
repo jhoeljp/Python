@@ -2,8 +2,8 @@ import requests
 
 class DataManager:
     #This class is responsible for talking to the Google Sheet.
-    def __init__(self):
-        self.end_point = "https://api.sheety.co/your_google_sheets_link"
+    def __init__(self,api_end_point):
+        self.end_point = api_end_point
     def update_iata(self,data):
         for row in data:
             info = {"price": row}
