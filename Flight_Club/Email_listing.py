@@ -3,7 +3,7 @@ import smtplib as mail
 
 class Users:
   def __init__(self):
-    self.users_end_point = "https://api.sheety.co/f93a6da950a276baf00819e5ab082187/flightClub/users"
+    self.users_end_point = "your_users_google_sheet"
     self.get()
   def get(self):
     response = requests.put(url=self.users_end_point)
