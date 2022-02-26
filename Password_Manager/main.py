@@ -3,7 +3,7 @@ from tkinter import *
 from tkinter import messagebox
 import random
 import json
-import os 
+
 #global variables
 BG = "#FFEDD3"
 FONT_COLOR = "#FC4F4F"
@@ -14,7 +14,8 @@ PASSWORD_FILE = "passwords.json"
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 #password constants
-letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+capittalLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
 
@@ -23,8 +24,9 @@ def generate_password():
     #random amount of input types
     #select number of randoms
     password_list += "".join(random.choice(letters) for char in range(random.randint(3, 5)))
-    password_list += "".join(random.choice(symbols) for char in range(random.randint(2, 4)))
-    password_list += "".join(random.choice( numbers) for char in range(random.randint(2, 4)))
+    password_list += "".join(random.choice(capittalLetters) for capitalLetters in range(random.randint(2, 3)))
+    password_list += "".join(random.choice(symbols) for symbol in range(random.randint(2, 4)))
+    password_list += "".join(random.choice(numbers) for number in range(random.randint(2, 4)))
     #shuffle eandom characters
     password_list = list(password_list)
     random.shuffle(password_list)
