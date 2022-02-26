@@ -3,7 +3,7 @@ from tkinter import *
 from tkinter import messagebox
 import random
 import json
-import os 
+
 #global variables
 BG = "#FFEDD3"
 FONT_COLOR = "#FC4F4F"
