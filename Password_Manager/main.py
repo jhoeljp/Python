@@ -16,7 +16,8 @@ PASSWORD_FILE = "passwords.json"
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 #password constants
-letters = list(string.ascii_letters)
+letters_lower = list(string.ascii_lowercase)
+letters_upper = list(string.ascii_uppercase)
 numbers = [str(i) for i in range(0,10)]
 symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
 
@@ -24,7 +25,8 @@ def generate_password():
     password_list = ""
     #random amount of input types
     #select number of randoms
-    password_list += "".join(choice(letters) for _ in range(randint(3, 5)))
+    password_list += "".join(choice(letters_lower) for _ in range(randint(1, 3)))
+    password_list += "".join(choice(letters_upper) for _ in range(randint(2, 3)))
     password_list += "".join(choice(symbols) for _ in range(randint(2, 4)))
     password_list += "".join(choice(numbers) for _ in range(randint(2, 4)))
 
