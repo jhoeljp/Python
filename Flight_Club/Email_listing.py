@@ -10,7 +10,7 @@ class Users:
   def get(self):
 
     #make request 
-    response = requests.put(url=self.users_end_point)
+    response = requests.get(url=self.users_end_point)
 
     #raise error on request if any 
     response.raise_for_status()
