@@ -57,28 +57,42 @@ SCOPE = "playlist-modify-private"
 #Authorization method 
 #In order to make successful Web API requests your app will need a valid access token. One can be obtained through OAuth 2.0.
 auth2 = SpotifyOAuth(client_id=os.environ.get("SPOTIPY_CLIENT_ID"), client_secret=os.environ.get("SPOTIPY_CLIENT_SECRET") , scope=SCOPE)
-#get Access Token 
-# token = auth2.get_access_token(check_cache=True)
+
+#Request Access Token
 token = auth2.get_cached_token()
 access_tk = token['access_token']
-# access_type = token['token_type']
+refresh_tk = token['refresh_token']
+# # access_type = token['token_type']
 
-#using the authoraize token to get authorized user id
+
+#Make Request to Spotify API 
+#format "Authorization: Bearer NgCXRK...MzYjw"
+header_auth = {"Authorization": f"Bearer {access_tk}"}
+
+
+# request_url = "https://api.spotify.com/v1/tracks/2TpxZ7JUBn3uw46aR7qd6V"
+# response = requests.get(url=request_url,headers=header_auth)
+# response.raise_for_status()
+# print(response.text)
+
+#get authorized user account details 
 sp = spotipy.client.Spotify(auth=access_tk)
 user = sp.current_user()
 ID = user['id']
+print(user)
 
-#once authorized lets create a brand new playlist 
-playlist_end_point = "https://api.spotify.com/v1"
+#once authorized lets Create a brand new Playlist 
+playlist_end_point = f"https://api.spotify.com/v1/users/{ID}/playlists"
 
-#make post request creating playlist 
-new_playlist_url = playlist_end_point+ f"/users/{ID}/playlists"
-new_playlist_header = {
-        'Authorization': f"Bearer {access_tk}"}
-#public default to true 
+#make body of request
+
+#public field defaults to true
 new_playlist_data = {
     "name": f"{date} 100 Billboard",
     "description": f"Travel back in time and listen to the Top 100 Billboard songs from {date}"
 }
-response = requests.post(url=new_playlist_url,data=new_playlist_data,headers=new_playlist_header)
+
+#make POST request creating playlist 
+response = requests.post(url=playlist_end_point,data=new_playlist_data,headers=header_auth)
+response.raise_for_status()
 print(response.text)
