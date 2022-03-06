@@ -31,7 +31,6 @@ response.raise_for_status()
 
 #Scrape for list of songs 
 from bs4 import BeautifulSoup
-import pprint
 soup = BeautifulSoup(response.text,"html.parser")
 
 top_song = (soup.find(name='a',class_="c-title__link lrv-a-unstyle-link")).getText()
@@ -52,22 +51,50 @@ load_dotenv(full_env_path)
 
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
+
+#Authoriation variables
+CLIENT_ID = os.environ.get("SPOTIPY_CLIENT_ID")
+CLIENT_SECRET = os.environ.get("SPOTIPY_CLIENT_SECRET")
+RE_URI = os.environ.get("SPOTIPY_REDIRECT_URI")
 SCOPE = "playlist-modify-private"
+
 
 #Authorization method 
 #In order to make successful Web API requests your app will need a valid access token. One can be obtained through OAuth 2.0.
-auth2 = SpotifyOAuth(client_id=os.environ.get("SPOTIPY_CLIENT_ID"), client_secret=os.environ.get("SPOTIPY_CLIENT_SECRET") , scope=SCOPE)
+auth2 = SpotifyOAuth(client_id=CLIENT_ID ,client_secret= CLIENT_SECRET,redirect_uri= RE_URI,scope=SCOPE)
+
+sp = spotipy.Spotify(auth_manager=auth2)
 
 #Request Access Token
 token = auth2.get_cached_token()
 access_tk = token['access_token']
 refresh_tk = token['refresh_token']
 # # access_type = token['token_type']
+# print(token)
 
 
-#Make Request to Spotify API 
+#---------------- Make Request to Spotify API 
 #format "Authorization: Bearer NgCXRK...MzYjw"
 header_auth = {"Authorization": f"Bearer {access_tk}"}
+
+import argparse
+import logging
+
+logger = logging.getLogger('examples.create_playlist')
+logging.basicConfig(level='DEBUG')
+
+def get_args():
+    #public field defaults to true
+    data = {
+    "name": f"{date} 100 Billboard",
+    "description": f"Travel back in time and listen to the Top 100 Billboard songs from {date}"}
+
+    parser = argparse.ArgumentParser(description='Creates a playlist for user')
+    parser.add_argument('-p', '--playlist', required=True,
+                        help='Name of Playlist')
+    parser.add_argument('-d', '--description', required=False, default='new playlist',
+                        help='Description of Playlist')
+    return parser.parse_args()
 
 
 # request_url = "https://api.spotify.com/v1/tracks/2TpxZ7JUBn3uw46aR7qd6V"
@@ -76,23 +103,18 @@ header_auth = {"Authorization": f"Bearer {access_tk}"}
 # print(response.text)
 
 #get authorized user account details 
-sp = spotipy.client.Spotify(auth=access_tk)
-user = sp.current_user()
-ID = user['id']
-print(user)
+# sp = spotipy.client.Spotify(auth=access_tk)
+args = get_args()
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=SCOPE))
+ID = sp.me()['id']
+sp.user_playlist_create(ID, args.playlist)
 
 #once authorized lets Create a brand new Playlist 
 playlist_end_point = f"https://api.spotify.com/v1/users/{ID}/playlists"
 
-#make body of request
 
-#public field defaults to true
-new_playlist_data = {
-    "name": f"{date} 100 Billboard",
-    "description": f"Travel back in time and listen to the Top 100 Billboard songs from {date}"
-}
+#make POST request creating brand new playlist 
+# response = requests.post(url=playlist_end_point,data=new_playlist_data,headers=header_auth)
+# response.raise_for_status()
+# print(response.text)
 
-#make POST request creating playlist 
-response = requests.post(url=playlist_end_point,data=new_playlist_data,headers=header_auth)
-response.raise_for_status()
-print(response.text)
