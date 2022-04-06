@@ -42,13 +42,12 @@ from pprint import pprint as b_print
 #date 
 # date = input("Enter date to look 100 Billboard (year-month-day): ")
 date = "1996-08-29"
-song_delimeter = "#"
+song_delimeter = "@"
 
 def scrape_billboard(date,delimeter):
 
     #get url's html to scrape from
     URL = f"https://www.billboard.com/charts/hot-100/{date}"
-
     response = requests.get(url=URL)
 
     response.raise_for_status()
@@ -57,27 +56,26 @@ def scrape_billboard(date,delimeter):
     soup = BeautifulSoup(response.text,"html.parser")
 
     #SONG DETAILS 
-    song_titles, song_authors = [], []
+    songs_titles, songs_authors = [], []
     #get top song 
-    top_song = (soup.find(name='a',class_="c-title__link lrv-a-unstyle-link")).getText().split('\n')[1]
+    top_song = (soup.find(name='a',class_="c-title__link lrv-a-unstyle-link")).getText().split('\t')[8]
     top_artist = (soup.find(name='p',class_="c-tagline a-font-primary-l a-font-primary-m@mobile-max lrv-u-color-black u-color-white@mobile-max lrv-u-margin-tb-00 lrv-u-padding-t-025 lrv-u-margin-r-150")).getText().split('\n')[0]
 
-    song_titles.append(top_song)
-    song_authors.append(top_artist)
-
     #get rest of top chart songs 
-    song_titles = [(song.getText()).split('\n')[1] for song in soup.find_all(name="h3",class_="c-title a-no-trucate a-font-primary-bold-s u-letter-spacing-0021 lrv-u-font-size-18@tablet lrv-u-font-size-16 u-line-height-125 u-line-height-normal@mobile-max a-truncate-ellipsis u-max-width-330 u-max-width-230@tablet-only")]
-    song_authors = [(song.getText()).split('\n')[1] for song in soup.find_all(name="span",class_="c-label a-no-trucate a-font-primary-s lrv-u-font-size-14@mobile-max u-line-height-normal@mobile-max u-letter-spacing-0021 lrv-u-display-block a-truncate-ellipsis-2line u-max-width-330 u-max-width-230@tablet-only")]
+    songs_titles = [(song.getText().split('\t'))[9] for song in soup.find_all(name="h3",id="title-of-a-story",class_="c-title a-no-trucate a-font-primary-bold-s u-letter-spacing-0021 lrv-u-font-size-18@tablet lrv-u-font-size-16 u-line-height-125 u-line-height-normal@mobile-max a-truncate-ellipsis u-max-width-330 u-max-width-230@tablet-only")]
+    songs_authors = [((((song.getText()).split('\t'))[2]).split('\n'))[0] for song in soup.find_all(name="span",class_="c-label a-no-trucate a-font-primary-s lrv-u-font-size-14@mobile-max u-line-height-normal@mobile-max u-letter-spacing-0021 lrv-u-display-block a-truncate-ellipsis-2line u-max-width-330 u-max-width-230@tablet-only")]
     
+    songs_titles.insert(0,top_song)
+    songs_authors.insert(0,top_artist)
     #join on list song-author for a better spotify api search 
-    billboard_list = [f"{song}{delimeter}{song_authors[i]}" for i,song in enumerate(song_titles)]
+    billboard_list = [f"{song}{delimeter}{songs_authors[i]}" for i,song in enumerate(songs_titles)]
     # b_print(billboard_list)
 
     return billboard_list
 
 #scrapped top 100 song of date
 billboard_list = scrape_billboard(date,song_delimeter)
-
+b_print(billboard_list)
 
 #------------------ SPOTIFY ------------------
 
@@ -121,12 +119,11 @@ def get_spotify_user():
     #                         name=new_playlist['name'],
     #                         public=True,
     #                         description=new_playlist['description'])
-
     return sp, user_id
 
 
 #Obtain Spotidy ID for Spotify client 
-SP, USER_ID = get_spotify_user()
+# SP, USER_ID = get_spotify_user()
 
 
 #MAKE LIST OF SONGS 
@@ -137,7 +134,13 @@ def find_spotify_songs(SP):
         song, author = song_info.split(song_delimeter)
         #narrow down your search using field filters. 
         # query = f"track: {song} artist:{author} year: {date.split('-')[0]}" 
-        query = f"track: {song} artist:{author}" 
+        
+        # query = f"track: {song} artist:{author}" 
+        #"remaster%20track:Doxy+artist:Miles%20Davis"
+        api_song = "%20".join(song.split(' '))
+        # print(api_song)
+        print(song)
+        query = f"track:{api_song}+artist:{author}" 
         # print(query)
     
 
@@ -159,7 +162,9 @@ def find_spotify_songs(SP):
             pass
     return uri_list
 
-songs_uri_list = find_spotify_songs(SP)
+# songs_uri_list = find_spotify_songs(SP)
+# for song in songs_uri_list:
+#     print(song)
 
 #Create brand new playlist 
 
