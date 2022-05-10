@@ -36,7 +36,7 @@ import os
 from pprint import pprint as b_print  
 
 
-#------------------ BILLBOARD ------------------
+#------------------ BILLBOARD WEBPAGE ------------------
 
 
 #date 
@@ -86,12 +86,11 @@ full_env_path = f"{os.getcwd()}/{ENV_FILE}"
 load_dotenv(full_env_path)
 
 
-#Authoriation variables
+#Authorization variables
 CLIENT_ID = os.environ.get("SPOTIPY_CLIENT_ID")
 CLIENT_SECRET = os.environ.get("SPOTIPY_CLIENT_SECRET")
 RE_URI = os.environ.get("SPOTIPY_REDIRECT_URI")
 SCOPE = "playlist-modify-private"
-
 
 def get_spotify_user():
 
@@ -123,46 +122,48 @@ def get_spotify_user():
 
 
 #Obtain Spotidy ID for Spotify client 
-# SP, USER_ID = get_spotify_user()
+SP, USER_ID = get_spotify_user()
 
 
 #MAKE LIST OF SONGS 
 def find_spotify_songs(SP):
     uri_list = []
 
-    for song_info in billboard_list:
-        song, author = song_info.split(song_delimeter)
-        #narrow down your search using field filters. 
-        # query = f"track: {song} artist:{author} year: {date.split('-')[0]}" 
+    search_result = SP.search(q="remaster%20track:Doxy+artist:Miles%20Davis",limit=1,type="track",offset=0)
+    b_print(search_result)
+
+    # for song_info in billboard_list:
+    #     song, author = song_info.split(song_delimeter)
+    #     #narrow down your search using field filters. 
+    #     # query = f"track: {song} artist:{author} year: {date.split('-')[0]}" 
         
-        # query = f"track: {song} artist:{author}" 
-        #"remaster%20track:Doxy+artist:Miles%20Davis"
-        api_song = "%20".join(song.split(' '))
-        # print(api_song)
-        print(song)
-        query = f"track:{api_song}+artist:{author}" 
-        # print(query)
+    #     # query = f"track: {song} artist:{author}" 
+    #     #"remaster%20track:Doxy+artist:Miles%20Davis"
+    #     api_song = "%20".join(song.split(' '))
+    #     api_artist = "%20".join(author.split(' '))
+    #     query = f"track:{api_song}+artist:{api_artist}" 
+    #     # print(query)
     
 
-        #search with filters 
-        search_result = SP.search(q=query,limit=1,type="track",offset=0)
-        # b_print(search_result)
+    #     #search with filters 
+    #     search_result = SP.search(q=query,limit=1,type="track",offset=0)
+    #     b_print(search_result)
 
-        # print(((search_result['tracks'])['items'])['uri'])
-        try:
-            track_uri = ((((search_result['tracks'])['items']))[0])['uri']
-            uri_list.append(track_uri)
-        except IndexError:
-            #track doesnt exist or search is empty 
-            # print("IndexError")
-            # uri_list.append("None")
+    #     # print(((search_result['tracks'])['items'])['uri'])
+    #     try:
+    #         track_uri = ((((search_result['tracks'])['items']))[0])['uri']
+    #         uri_list.append(track_uri)
+    #     except IndexError:
+    #         #track doesnt exist or search is empty 
+    #         # print("IndexError")
+    #         # uri_list.append("None")
 
-            # b_print((((search_result['tracks'])['items'])))
+    #         # b_print((((search_result['tracks'])['items'])))
             
-            pass
+    #         pass
     return uri_list
 
-# songs_uri_list = find_spotify_songs(SP)
+songs_uri_list = find_spotify_songs(SP)
 # for song in songs_uri_list:
 #     print(song)
 
