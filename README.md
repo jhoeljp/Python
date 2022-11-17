@@ -14,7 +14,7 @@ Tool that uses Google Sheets API, Tequila API for ticket pricing to fetch cheape
 
 Friednly UI to stimulate study cycle using the pomodoro tecnique 
 
-*4)Stock News *
+*4)Stock News*
 
 fetch news for a particular Stock Ticker using alphavantage.co News API 
 
