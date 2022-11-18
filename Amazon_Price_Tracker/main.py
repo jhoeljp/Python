@@ -12,7 +12,22 @@ https://www.amazon.sa/-/en/HyperX-HHSS1C-BA-BK-Cloud-Stinger-Core/dp/B08634653D/
 
 from requests import get
 from bs4 import BeautifulSoup as bsoup
+import smtplib
+from dotenv import load_dotenv
+from os import getcwd, environ
 
+#get environment path 
+env_path = f"{getcwd()}\Amazon_Price_Tracker\secrets.env"
+print(env_path)
+
+load_dotenv(env_path)
+
+#load email variables for smtp 
+EMAIL_USER = environ.get("EMAIL")
+PASSWORD = environ.get("PASSWORD")
+EMAIL_SERVER = environ.get("EMAIL_SERVER")
+
+#amazon link to track
 end_point = "https://www.amazon.sa/-/en/HyperX-HHSS1C-BA-BK-Cloud-Stinger-Core/dp/B08634653D/ref=sr_1_3?crid=HUJ6UKDWOJ7P&keywords=Gaming+Headset+for+PC&qid=1668536900&qu=eyJxc2MiOiIxLjk0IiwicXNhIjoiMS4yNSIsInFzcCI6IjAuMDAifQ%3D%3D&refinements=p_n_feature_twelve_browse-bin%3A27957730031%2Cp_n_feature_eight_browse-bin%3A27315962031&rnid=27315961031&s=videogames&sprefix=gaming+headset+for+pc%2Caps%2C189&sr=1-3"
 
 #heading params for request
@@ -30,3 +45,26 @@ price = soup.find("span", {"class": "a-offscreen"})
 
 #extract true price as float number 
 amz_price = float(''.join([i for i in price.get_text() if i.isnumeric() or i=='.']))
+
+#send email alert when price drops from original 
+good_price = 400
+
+if amz_price <= good_price:
+
+    with smtplib.SMTP(EMAIL_SERVER) as connection:
+        try:
+            connection.starttls()
+
+            #login with internal email details 
+            connection.login(user=EMAIL_USER,password=PASSWORD)
+            
+            message = "Go buy some new headsets, the price has dropped to about 300 SAR."
+            
+            #send email message 
+            connection.send_message(msg=message, from_addr=EMAIL_USER, to_addrs=EMAIL_USER)
+            
+        except smtplib.SMTPException as e :
+            print("Email could not be sent! ")
+            print(e)
+else:
+    print(f"price is still greater than {good_price}")
