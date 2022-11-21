@@ -52,16 +52,22 @@ amz_price = float(''.join([i for i in price.get_text() if i.isnumeric() or i=='.
 good_price = 400
 
 if amz_price <= good_price:
-    with smtplib.SMTP_SSL('smtp.gmail.com',465) as connection:
-        try:            
-            connection.connect()
+    ssl_port = 465
+    context = ssl.create_default_context()
 
-            connection.starttls()
-
+    with smtplib.SMTP_SSL(EMAIL_SERVER,ssl_port,context=context) as connection:
+        try:     
             #login with internal email details 
             connection.login(user=EMAIL_USER,password=PASSWORD)
             
-            message = "Go buy some new headsets, the price has dropped to about 300 SAR."
+            message = """
+                    Subject: Amazon Alert!
+
+                    Go buy some new headsets, the price has dropped to about 300 SAR.
+                    
+                    https://www.amazon.sa/-/en/HyperX-HHSS1C-BA-BK-Cloud-Stinger-Core/dp/B08634653D/ref=sr_1_3?crid=HUJ6UKDWOJ7P&keywords=Gaming+Headset+for+PC&qid=1668536900&qu=eyJxc2MiOiIxLjk0IiwicXNhIjoiMS4yNSIsInFzcCI6IjAuMDAifQ%3D%3D&refinements=p_n_feature_twelve_browse-bin%3A27957730031%2Cp_n_feature_eight_browse-bin%3A27315962031&rnid=27315961031&s=videogames&sprefix=gaming+headset+for+pc%2Caps%2C189&sr=1-3
+                    
+                    """
             
             #send email message 
             connection.sendmail(msg=message, from_addr=EMAIL_USER, to_addrs=EMAIL_USER)
