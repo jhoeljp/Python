@@ -42,13 +42,32 @@ else:
     job_search_link = "https://www.linkedin.com/jobs/search/?currentJobId=3368389848&f_AL=true&f_E=1%2C2%2C3&f_JT=F%2CP%2CC%2CT%2CI&f_WT=1%2C2%2C3&geoId=102890719&keywords=data%20analyst&location={LOCATION}&refresh=true&sortBy=R"
     driver.get(job_search_link)
 
-    job_list = driver.find_elements(By.CLASS_NAME,"ember-view   jobs-search-results__list-item occludable-update p0 relative scaffold-layout__list-item\n\n\n          ")
+    job_list = driver.find_elements(By.CLASS_NAME, "scaffold-layout__list-container")
 
-    for i in job_list:
-        print(i.text)
+    sleep(3)
 
+    #find company of job posting
+    # print(job_list[0].text)
+    info_list = (job_list[0].text).replace("\n"," ")
+    info_list = info_list.split("Easy Apply ")
+
+    for info in info_list:
+        pass
+
+        
+
+    #apply for each position available 
+
+    #click of job posting to open application 
+        # job.click()
+
+        #get a hold of easy apply button 
+        # driver.find_element(By.CLASS_NAME,"artdeco-button__text").click()
 
     sleep(500)
+
+        
+
 
     # driver.close()
     # driver.quit()
