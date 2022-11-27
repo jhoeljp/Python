@@ -55,10 +55,9 @@ else:
 
     sleep(2)
     #bypass security check
-    signin_2_btn = driver.find_element("/html/body/div[1]/header/nav/div/a[2]")
 
     try:
-        # signin_2_btn = driver.find_element("/html/body/div[1]/header/nav/div/a[2]")
+        signin_2_btn = driver.find_element("/html/body/div[1]/header/nav/div/a[2]")
         signin_2_btn.click()
 
         sleep(500)
