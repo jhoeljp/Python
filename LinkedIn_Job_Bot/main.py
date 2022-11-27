@@ -7,20 +7,6 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 
 
-def login_linked_in(driver: webdriver.Chrome, USER: str, PASSWORD:str):
-    #log in into Linkedin account 
-    user_element = driver.find_element(By.ID, "session_key")
-    user_element.send_keys(USER)
-
-    password_element = driver.find_element(By.ID, "session_password")
-    password_element.send_keys(PASSWORD)
-
-    sigin_button = driver.find_element(By.CLASS_NAME,"sign-in-form__submit-button")
-    sigin_button.click()
-
-
-
-
 #load account details for login 
 environment_file = f"{getcwd()}\secrets.env"
 
@@ -45,7 +31,15 @@ else:
     
     sleep(2)
 
-    login_linked_in(driver,USER,PASSWORD)
+    #log in into Linkedin account 
+    user_element = driver.find_element(By.ID, "session_key")
+    user_element.send_keys(USER)
+
+    password_element = driver.find_element(By.ID, "session_password")
+    password_element.send_keys(PASSWORD)
+
+    sigin_button = driver.find_element(By.CLASS_NAME,"sign-in-form__submit-button")
+    sigin_button.click()
 
     sleep(3)
 
@@ -54,19 +48,31 @@ else:
     driver.get(job_search_link)
 
     sleep(2)
-    #bypass security check
 
+    #bypass security check
     try:
-        signin_2_btn = driver.find_element("/html/body/div[1]/header/nav/div/a[2]")
+        signin_2_btn = driver.find_element(By.XPATH,"/html/body/div[1]/header/nav/div/a[2]")
         signin_2_btn.click()
 
-        sleep(500)
-        login_linked_in(driver,USER,PASSWORD)
+        sleep(1.4)
+
+        #log in into Linkedin account 
+        user_element = driver.find_element(By.NAME, "session_key")
+        user_element.send_keys(USER)
+
+        password_element = driver.find_element(By.NAME, "session_password")
+        password_element.send_keys(PASSWORD)
+
+        # sigin_button = driver.find_element(By.CLASS_NAME,"btn__primary--large from__button--floating")
+        # sigin_button.click()
+        sleep(1)
+        password_element.send_keys(Keys.ENTER)
 
     except Exception as ex:
         print(str(ex))
         pass
 
+    sleep(500)
     #container of job postings
     job_listing_elem = driver.find_elements(By.CLASS_NAME, "scaffold-layout__list-container")
     
