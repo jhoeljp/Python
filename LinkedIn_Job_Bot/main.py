@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from os import getcwd, path, environ
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
 
 #load account details for login 
 environment_file = f"{getcwd()}\secrets.env"
@@ -24,6 +25,7 @@ else:
 
     driver = webdriver.Chrome()
 
+    driver.maximize_window()
     driver.get(jobs_url)
 
     #log in into Linkedin account 
@@ -42,32 +44,30 @@ else:
     job_search_link = "https://www.linkedin.com/jobs/search/?currentJobId=3368389848&f_AL=true&f_E=1%2C2%2C3&f_JT=F%2CP%2CC%2CT%2CI&f_WT=1%2C2%2C3&geoId=102890719&keywords=data%20analyst&location={LOCATION}&refresh=true&sortBy=R"
     driver.get(job_search_link)
 
-    job_list = driver.find_elements(By.CLASS_NAME, "scaffold-layout__list-container")
+    job_listing_elem = driver.find_elements(By.CLASS_NAME, "scaffold-layout__list-container")
 
     sleep(3)
 
-    #find company of job posting
-    # print(job_list[0].text)
-    info_list = (job_list[0].text).replace("\n"," ")
-    info_list = info_list.split("Easy Apply ")
-
-    for info in info_list:
-        pass
-
-        
+    job_list = job_listing_elem[0].find_elements(By.TAG_NAME,"li")
 
     #apply for each position available 
+    for i in job_list:
 
-    #click of job posting to open application 
-        # job.click()
+        actions = ActionChains(driver)
+
+        #click of job posting to open application 
+        actions.move_to_element(i)
+        actions.click()
+        actions.perform()
+
+        sleep(1)
+
+        print(i.text)
 
         #get a hold of easy apply button 
-        # driver.find_element(By.CLASS_NAME,"artdeco-button__text").click()
 
     sleep(500)
+    
 
-        
-
-
-    # driver.close()
-    # driver.quit()
+    driver.close()
+    driver.quit()
