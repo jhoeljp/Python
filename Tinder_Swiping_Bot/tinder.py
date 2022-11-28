@@ -55,27 +55,32 @@ if exists(env_path):
     #login
     password.send_keys(Keys.ENTER)
 
-    sleep(4)
+    sleep(5)
     #switch back to main browser window 
     driver.switch_to.window(master_handle)
     
     #allow browser to get location
     driver.find_element(By.XPATH,"/html/body/div[2]/main/div/div/div/div[3]/button[1]").click()
 
-    sleep(0.5)
+    sleep(2)
     #click not interest about getting new matches notification 
     driver.find_element(By.XPATH,"/html/body/div[2]/main/div/div/div/div[3]/button[2]").click()
 
     #reject dark mode for browser 
-    sleep(0.3)
+    sleep(2)
     driver.find_element(By.XPATH,"/html/body/div[2]/main/div/div[2]/button").click()
 
+    sleep(2)
     #send unlimited likes 
     #maximum set of likes for non premium users is 100
+    like_btn = driver.find_element(By.XPATH,"/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div/div[4]/div/div[4]/button")
+
     for i in range(100): 
-        like_btn = driver.find_element(By.XPATH,"/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div/div[4]/div/div[4]/button")
+        
         like_btn.click()
-        sleep(0.5)
+        sleep(3)
+
+    #detect when its a match ???
 
     driver.close()
     driver.quit()
