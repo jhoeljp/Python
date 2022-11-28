@@ -25,6 +25,9 @@ if exists(env_path):
 
     driver.get("https://www.tinder.com")
 
+    #store main window handle as master 
+    master_handle = driver.window_handles[0]
+
     sleep(2)
     #accept all browser cookies 
     driver.find_element(By.XPATH,"/html/body/div[1]/div/div[2]/div/div/div[1]/div[1]").click()
@@ -38,6 +41,10 @@ if exists(env_path):
     driver.find_element(By.XPATH,"/html/body/div[2]/main/div/div[1]/div/div/div[3]/span/div[2]").click()
 
     sleep(3)
+    #get hold of popup window handle and switch driver 
+    popup_handle = driver.window_handles[1]
+    driver.switch_to.window(popup_handle)
+
     #input login credentials on pop-up
     email = driver.find_element(By.ID,"email")
     email.send_keys(Tinder_USER)
@@ -48,8 +55,27 @@ if exists(env_path):
     #login
     password.send_keys(Keys.ENTER)
 
+    sleep(4)
+    #switch back to main browser window 
+    driver.switch_to.window(master_handle)
+    
+    #allow browser to get location
+    driver.find_element(By.XPATH,"/html/body/div[2]/main/div/div/div/div[3]/button[1]").click()
 
-    sleep(500)
+    sleep(0.5)
+    #click not interest about getting new matches notification 
+    driver.find_element(By.XPATH,"/html/body/div[2]/main/div/div/div/div[3]/button[2]").click()
+
+    #reject dark mode for browser 
+    sleep(0.3)
+    driver.find_element(By.XPATH,"/html/body/div[2]/main/div/div[2]/button").click()
+
+    #send unlimited likes 
+    #maximum set of likes for non premium users is 100
+    for i in range(100): 
+        like_btn = driver.find_element(By.XPATH,"/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div/div[4]/div/div[4]/button")
+        like_btn.click()
+        sleep(0.5)
 
     driver.close()
     driver.quit()
