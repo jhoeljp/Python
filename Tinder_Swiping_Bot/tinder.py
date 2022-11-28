@@ -37,9 +37,6 @@ if exists(env_path):
     #login with facebook 
     driver.find_element(By.XPATH,"/html/body/div[2]/main/div/div[1]/div/div/div[3]/span/div[2]").click()
 
-    print(type(pop_up))
-
-    sleep(100)
     sleep(3)
     #input login credentials on pop-up
     email = driver.find_element(By.ID,"email")
