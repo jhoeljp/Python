@@ -40,7 +40,7 @@ if exists(env_path):
     #login with facebook 
     driver.find_element(By.XPATH,"/html/body/div[2]/main/div/div[1]/div/div/div[3]/span/div[2]").click()
 
-    sleep(3)
+    sleep(4)
     #get hold of popup window handle and switch driver 
     popup_handle = driver.window_handles[1]
     driver.switch_to.window(popup_handle)
@@ -75,9 +75,12 @@ if exists(env_path):
     #maximum set of likes for non premium users is 100
     like_btn = driver.find_element(By.XPATH,"/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div/div[4]/div/div[4]/button")
 
-    sleep(500)
-
     for i in range(100): 
+
+        #at 5th swipe ignore pop-up for adding tinder to home screen
+        if i == 6:
+            driver.find_element(By.XPATH,"/html/body/div[2]/main/div/div[2]/button[2]").click()
+            sleep(0.5)
         
         like_btn.click()
         sleep(2)
