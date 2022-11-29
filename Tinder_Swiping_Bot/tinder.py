@@ -28,15 +28,15 @@ if exists(env_path):
     #store main window handle as master 
     master_handle = driver.window_handles[0]
 
-    sleep(2)
+    sleep(3)
     #accept all browser cookies 
     driver.find_element(By.XPATH,"/html/body/div[1]/div/div[2]/div/div/div[1]/div[1]").click()
 
-    sleep(2)
+    sleep(3)
     #click to log in with environ variables
     driver.find_element(By.XPATH, "/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div/div/header/div/div[2]/div[2]").click()
 
-    sleep(2)
+    sleep(3)
     #login with facebook 
     driver.find_element(By.XPATH,"/html/body/div[2]/main/div/div[1]/div/div/div[3]/span/div[2]").click()
 
@@ -75,12 +75,21 @@ if exists(env_path):
     #maximum set of likes for non premium users is 100
     like_btn = driver.find_element(By.XPATH,"/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div/div[4]/div/div[4]/button")
 
+    sleep(500)
+
     for i in range(100): 
         
         like_btn.click()
-        sleep(3)
+        sleep(2)
 
-    #detect when its a match ???
+
+        #detect when its a match
+        try:
+            driver.find_element(By.XPATH,"/html/body/div[1]/div/div[1]/div/main/div[2]/main/div/div[1]/div/div[4]/button").click()
+        except Exception as ex:
+            print("Profile is not a match!")
+
+        sleep(0.5)
 
     driver.close()
     driver.quit()
