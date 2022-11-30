@@ -1,6 +1,6 @@
 **Twitter Complain Bot**
 
-Using Selenium module .
+Using Selenium module.
 
 Obtain Internet Speed (Download and Upload).
 
