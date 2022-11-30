@@ -59,7 +59,7 @@ class InternetSpeedTwitterBot():
             #log in with credentials 
             self.driver.get("https://twitter.com/i/flow/login")
 
-            sleep(2)
+            sleep(5)
 
             #input user credentials
             user = self.driver.find_element(By.CSS_SELECTOR,"input.r-13qz1uu")
@@ -67,10 +67,22 @@ class InternetSpeedTwitterBot():
 
             user.send_keys(Keys.ENTER)
 
-            sleep(3)
+            sleep(4)
+
+            #unusal activity pop-up
+            unusual_activity = self.driver.find_element(By.CSS_SELECTOR,"input.r-13qz1uu")
+            unusual_activity.send_keys(self.TWITTER_HANDLE)
+            unusual_activity.send_keys(Keys.ENTER)
+
+            sleep(4)
 
             #input password credentials 
+            password = self.driver.find_element(By.XPATH,"/html/body/div/div/div/div[1]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[1]/div/div/div[3]/div/label/div/div[2]/div[1]/input")
+            password.send_keys(self.TWITTER_PASSWORD)
 
+            password.send_keys(Keys.ENTER)  
+
+            sleep(8)     
 
             #write out new tweet 
 
@@ -96,6 +108,7 @@ class InternetSpeedTwitterBot():
             #get twitter credentials for login
             self.TWITTER_USER = environ.get("TWITTER_USER")
             self.TWITTER_PASSWORD = environ.get("TWITTER_PASSWORD")
+            self.TWITTER_HANDLE = environ.get("TWITTER_HANDLE")
             self.INTERNET_IDEAL = int(environ.get("INTERNET_IDEAL"))
 
         else:
