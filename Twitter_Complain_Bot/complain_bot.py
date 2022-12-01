@@ -40,12 +40,10 @@ class InternetSpeedTwitterBot():
         Dict['Download']= float(Download_speed)
         Dict['Upload']= float(Upload_speed)
 
-        #close driver
-        # self.driver.close()
-
         return Dict
 
     def tweet_at_provider(self, message, actual_speed):
+
         #get authorization credentials
         self.authentication_credentials()
 
@@ -92,19 +90,17 @@ class InternetSpeedTwitterBot():
 
 
             sleep(4)
-            #send tweeet 
 
+            #send tweeet 
             tweet_btn = self.driver.find_element(By.XPATH,"/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div[2]/div[1]/div/div/div/div[2]/div[3]/div/div/div[2]/div[3]/div/span/span")
             tweet_btn.click()
 
             sleep(6)
-
+            
             #close driver
             self.driver.close()
 
             self.driver.quit()
-
-
 
         else:
             print("Internet Speed not slow enough to complain! ")
