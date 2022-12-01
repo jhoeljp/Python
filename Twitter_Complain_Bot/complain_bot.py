@@ -37,11 +37,11 @@ class InternetSpeedTwitterBot():
         sleep(2)
         Dict = {}
         Dict['ISP_Name'] = ISP_Name
-        Dict['Download']=Download_speed
-        Dict['Upload']=Upload_speed
+        Dict['Download']= float(Download_speed)
+        Dict['Upload']= float(Upload_speed)
 
         #close driver
-        self.driver.close()
+        # self.driver.close()
 
         return Dict
 
@@ -82,14 +82,27 @@ class InternetSpeedTwitterBot():
 
             password.send_keys(Keys.ENTER)  
 
-            sleep(8)     
+            sleep(3)     
 
             #write out new tweet 
+            draft_tweet = self.driver.find_element(By.CLASS_NAME,"public-DraftStyleDefault-ltr")
+            draft_tweet.click()
 
+            draft_tweet.send_keys(message)
+
+
+            sleep(4)
             #send tweeet 
+
+            tweet_btn = self.driver.find_element(By.XPATH,"/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div[2]/div[1]/div/div/div/div[2]/div[3]/div/div/div[2]/div[3]/div/span/span")
+            tweet_btn.click()
+
+            sleep(6)
 
             #close driver
             self.driver.close()
+
+            self.driver.quit()
 
 
 
