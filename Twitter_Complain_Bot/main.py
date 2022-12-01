@@ -10,14 +10,10 @@ if __name__ == "__main__":
         info = bot.get_internet_speed()
 
         #compose messsage to tweet 
-        Complain = f'''Hello {info['ISP_Name']}, why is my interent speed 
-        {info['Download']}down/{info["Upload"]}up when I am paying for '''
-
-        bot.tweet_at_provider("",100)
+        Complain = f"Hello {info['ISP_Name']}, why is my interent speed {info['Download']}down/{info['Upload']}up when I am paying for "
 
         #login and send tweet
-
-
+        bot.tweet_at_provider(Complain,info['Download'])
 
     except Exception as ex:
         print(str(ex))
