@@ -9,6 +9,7 @@ from sys import exit
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.remote.webelement import WebElement
 
 class Instagram_Follower():
     def __init__(self) -> None:
@@ -37,7 +38,7 @@ class Instagram_Follower():
         insta_password.send_keys(Keys.ENTER)
 
         sleep(7)
-        # sleep(400)
+
         #dismiss notification pop-up 
         self.driver.find_element(By.CSS_SELECTOR,"button._a9_1").click()
 
@@ -80,21 +81,34 @@ class Instagram_Follower():
         follower_body = self.driver.find_element(By.XPATH,"/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[2]")
 
         #scroll continously or for a set range
-        #scroll 25 times with 8 accounta a page
+        #scroll 25 times with 12 accounts per page
         scroll = 0
 
         while scroll < 100:
 
+            #follow all accounts visible 
+            self.follow(follower_body)
+
             #scroll down every 5 seconds 
             self.driver.execute_script('arguments[0].scrollTop = arguments[0].scrollTop + arguments[0].offsetHeight;', follower_body)
-            
+
             sleep(5)
             scroll += 1
+
+            print("Scrolling!")
 
         #terminate selenium driver 
         self.driver.close()
 
         self.driver.quit()
 
-    def follow(self):
-        pass
+    def follow(self,accounts: WebElement):
+
+        to_follow = accounts.find_elements(By.CSS_SELECTOR,"button._acas")
+
+        print(f"Number of account if {len(to_follow)}")
+
+        #follow all account on current page
+        for acc in to_follow:
+            acc.click()
+            sleep(1)
