@@ -18,5 +18,6 @@ if __name__ == "__main__":
     bot = Rent_Deals()
 
     #scrape zillow for info
+    bot.scrape_zillow_bs4()
 
     #input all data on google sheet 
