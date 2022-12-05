@@ -14,10 +14,15 @@ from renting_deals import Rent_Deals
 
 if __name__ == "__main__":
 
-    #init class
-    bot = Rent_Deals()
+    try:
+        #init class
+        bot = Rent_Deals()
 
-    #scrape zillow for info
-    bot.scrape_zillow_bs4()
+        #scrape zillow for info
+        bot.scrape_zillow_bs4()
 
-    #input all data on google sheet 
+        #input all data on google sheet 
+        bot.push_to_google_form()
+
+    except Exception as ex:
+        print(str(ex))
