@@ -119,6 +119,11 @@ class Rent_Deals():
             for li_elem in ul_elem.find_all('li'):
                 Zillow.append(li_elem.text)
 
+        self.Rent_info = {
+        'address':[],
+        'price':[],
+        'link':[]
+        }
         #do some data manipulation and store on dictionary
         for l in Zillow:
 
@@ -137,12 +142,70 @@ class Rent_Deals():
 
                 print(f"{address} on {city} at zip {zip_code} for the price of {price}")
 
+                #append to dictionary 
+                self.Rent_info['address'].append(f"{address},{city},{zip_code}")
+                self.Rent_info['price'].append(price)
+
+                #find property link
+                self.Rent_info['link'].append("N/a")
+
+
             except Exception as ex:
                 # print(str(ex))
                 pass
 
 
-    def push_to_google_form():
+    def push_to_google_form(self):
         #using selenium automate the filling out of forms using scraped data
         #https://forms.gle/ezHsJmEvu2eTzbbo9
-        pass
+
+        try:
+            #initialize seleniu driver 
+            self.driver = Chrome()
+
+            #link to google form 
+            google_endpoint = "https://forms.gle/ezHsJmEvu2eTzbbo9"
+
+            for index in range(0,len(self.Rent_info['address'])):
+                print(f"index: {index}")
+                sleep(5)
+
+                #make url request to google form
+                self.driver.get(google_endpoint)
+
+                sleep(6)
+
+                #locate input boxes on google form 
+                form = self.driver.find_elements(By.CSS_SELECTOR,"div.Qr7Oae")
+                print(f"form inputs: {len(form)}")
+
+                sleep(1)
+
+                #locate address input box 
+                address_input = form[0].find_element(By.CSS_SELECTOR,"input.whsOnd.zHQkBf")
+
+                # #locate price input box 
+                price_input = form[1].find_element(By.CSS_SELECTOR,"input.whsOnd.zHQkBf")
+
+                # #locate link input box 
+                link_input = form[2].find_element(By.CSS_SELECTOR,"input.whsOnd.zHQkBf")
+
+                # for property in self.Rent_info:
+                address_input.send_keys(self.Rent_info['address'][index])
+                price_input.send_keys(self.Rent_info['price'][index])
+                link_input.send_keys(self.Rent_info['link'][index])
+
+                sleep(3)
+                #click submit button 
+                submit_btn = self.driver.find_element(By.CSS_SELECTOR,"span.snByac")
+                submit_btn.click()
+
+            # else:
+            #     print('Google form elements could not be found !!!')
+            #     print(len(form))
+        except Exception as ex:
+            print(str(ex))
+
+        #close selenium driver
+        self.driver.close()
+        self.driver.quit()
