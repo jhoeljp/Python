@@ -114,10 +114,19 @@ class Rent_Deals():
 
         #get list of zillow elements
         Zillow =[]
+        urls = []
 
         for ul_elem in soup.select("ul.List-c11n-8-73-8__sc-1smrmqp-0.srp__sc-1psn8tk-0.bfcHMx.photo-cards.with_constellation"):
             for li_elem in ul_elem.find_all('li'):
                 Zillow.append(li_elem.text)
+            
+            #search for links to properties on html page 
+            # url = ul_elem.find_all("a",href=True)
+            # for a in url:
+            #     #avoid duplicate elements 
+            #     if a['href'] not in urls:
+            #         urls.append(a['href'])
+            #         print(a['href'])
 
         self.Rent_info = {
         'address':[],
