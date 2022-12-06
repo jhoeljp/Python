@@ -119,14 +119,15 @@ class Rent_Deals():
         for ul_elem in soup.select("ul.List-c11n-8-73-8__sc-1smrmqp-0.srp__sc-1psn8tk-0.bfcHMx.photo-cards.with_constellation"):
             for li_elem in ul_elem.find_all('li'):
                 Zillow.append(li_elem.text)
-            
-            #search for links to properties on html page 
-            # url = ul_elem.find_all("a",href=True)
-            # for a in url:
-            #     #avoid duplicate elements 
-            #     if a['href'] not in urls:
-            #         urls.append(a['href'])
-            #         print(a['href'])
+
+                #search for links to properties on html page 
+                url = li_elem.find('a',href=True)
+                url = url['href']
+
+                if url !=None:
+                    urls.append(url)
+                else:
+                    urls.append("N/A")
 
         self.Rent_info = {
         'address':[],
@@ -134,6 +135,7 @@ class Rent_Deals():
         'link':[]
         }
         #do some data manipulation and store on dictionary
+        i = 0
         for l in Zillow:
 
             try:
@@ -156,7 +158,8 @@ class Rent_Deals():
                 self.Rent_info['price'].append(price)
 
                 #find property link
-                self.Rent_info['link'].append("N/a")
+                self.Rent_info['link'].append(urls[i])
+                i+=1
 
 
             except Exception as ex:
@@ -209,9 +212,6 @@ class Rent_Deals():
                 submit_btn = self.driver.find_element(By.CSS_SELECTOR,"span.snByac")
                 submit_btn.click()
 
-            # else:
-            #     print('Google form elements could not be found !!!')
-            #     print(len(form))
         except Exception as ex:
             print(str(ex))
 
