@@ -1,20 +1,20 @@
 # Python
 
-Collection of Python projects 
+**Collection of Python Projects**
 
-*1)Amazon Price Tracker*
+*Instagram Follower Bot*
 
-Web scrape amazon for price of a product and use SMTP module to send email alerts
+Bot to reach out to new followers with similar interest to target account. Perfect for doing marketing outreach.
 
-*2)Flight Club* 
+*Flight Club* 
 
 Tool that uses Google Sheets API, Tequila API for ticket pricing to fetch cheapest flight available to custom locations.
 
-*3)pomodoro GUI*
+*Pomodoro GUI*
 
-Friednly UI to stimulate study cycle using the pomodoro tecnique 
+Friednly UI made to guide study cycles using the pomodoro tecnique.
 
-*4)Stock News*
+*Stock News*
 
-fetch news for a particular Stock Ticker using alphavantage.co News API 
+Fetch news for a particular Stock Ticker using alphavantage.co News API 
 
