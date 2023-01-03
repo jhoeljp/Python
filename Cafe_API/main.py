@@ -1,7 +1,8 @@
 from flask import Flask, jsonify, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 
-from random import randint
+from random import choice
+import pandas
 
 app = Flask(__name__)
 
@@ -13,6 +14,7 @@ db = SQLAlchemy(app)
 
 ##Cafe TABLE Configuration
 class Cafe(db.Model):
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250), unique=True, nullable=False)
     map_url = db.Column(db.String(500), nullable=False)
@@ -25,11 +27,40 @@ class Cafe(db.Model):
     can_take_calls = db.Column(db.Boolean, nullable=False)
     coffee_price = db.Column(db.String(250), nullable=True)
 
+    def serialize(self):
+       """Return object data in easily serializable format"""
+
+       return {'cafe':{
+                    "can_take_calls":self.can_take_calls,
+                        "coffee_price":self.coffee_price,
+                        "has_scokets":self.has_sockets,
+                        "has_toilet":self.has_toilet,
+                        "has_wifi":self.has_wifi,
+                        "id":self.id,
+                        "img_url":self.img_url,
+                        "location":self.location,
+                        "map_url":self.map_url,
+                        "name":self.name,
+                        "seats":self.seats
+                    }
+                }
+
+    def serialize_many(self,list:list):
+
+        """Return list of object data in easily serializable format"""
+        Dict = {'cafes':[]}
+
+        for cafe in list:
+            # print(cafe.serialize()['cafe'])
+            Dict['cafes'].append(cafe.serialize()['cafe'])
+
+        return Dict
 
 @app.route("/")
 def home():
     return render_template("index.html")
-    
+
+## HTTP GET - Radnom Record
 @app.route('/random',methods=['GET'])
 def random():
 
@@ -39,34 +70,29 @@ def random():
 
         with app.app_context():
 
-            #get id range available
-            max_id = db.session.query(Cafe).order_by(Cafe.id.desc()).first()
-            min_id = db.session.query(Cafe).order_by(Cafe.id.asc()).first()
-            
-            random_id = randint(min_id.id,max_id.id)
-
             #query random record 
-            random_record = db.session.query(Cafe).filter_by(id=random_id).one()
+            cafes = db.session.query(Cafe).all()
+            random_record = choice(cafes)
 
             db.session.close()
         
             #serialize db object 
-            return jsonify(
-                {'cafe':{
-                    "can_take_calls":random_record.can_take_calls,
-                    "coffee_price":random_record.coffee_price,
-                    "has_scokets":random_record.has_sockets,
-                    "has_toilet":random_record.has_toilet,
-                    "has_wifi":random_record.has_wifi,
-                    "id":random_record.id,
-                    "img_url":random_record.img_url,
-                    "location":random_record.location,
-                    "map_url":random_record.map_url,
-                    "name":random_record.name,
-                    "seats":random_record.seats
-                    }
-                }
-            )
+
+            return jsonify(random_record.serialize())
+
+
+## HTTP GET - All Records
+@app.route('/all',methods=['GET'])
+def all():
+
+    with app.app_context():
+
+        #query all records
+        all_cafes = db.session.query(Cafe).all()
+
+        db.session.close()
+
+        return jsonify(all_cafes[0].serialize_many(all_cafes))
 
 
 ## HTTP GET - Read Record
