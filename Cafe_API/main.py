@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template,  request
 from flask_sqlalchemy import SQLAlchemy
 
 from random import choice
@@ -96,6 +96,19 @@ def all():
 
 
 ## HTTP GET - Read Record
+@app.route('/search',methods=['GET'])
+def search():
+
+    #get location parameter 
+    loc_arg = request.args.get('loc',type=str)
+
+    with app.app_context():
+
+        query_response = db.session.query(Cafe).filter_by(location=loc_arg).first_or_404()
+
+        db.session.close()
+
+        return jsonify(query_response.serialize())
 
 ## HTTP POST - Create Record
 
