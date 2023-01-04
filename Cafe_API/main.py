@@ -51,7 +51,7 @@ class Cafe(db.Model):
         Dict = {'cafes':[]}
 
         for cafe in list:
-            # print(cafe.serialize()['cafe'])
+            
             Dict['cafes'].append(cafe.serialize()['cafe'])
 
         return Dict
@@ -60,7 +60,7 @@ class Cafe(db.Model):
 def home():
     return render_template("index.html")
 
-## HTTP GET - Radnom Record
+## HTTP GET - Random Record
 @app.route('/random',methods=['GET'])
 def random():
 
@@ -111,6 +111,43 @@ def search():
         return jsonify(query_response.serialize())
 
 ## HTTP POST - Create Record
+@app.route('/add',methods=['GET','POST'])
+def add():
+
+    #get Cafe parameters
+    
+    name_arg = request.form.get('name')
+    map_url_arg = request.form.get('map_url')
+    img_url_arg = request.form.get('img_url')
+    location_arg = request.form.get('location')
+    seats_arg = request.form.get('seats')
+    has_toilet_arg = bool(request.form.get('has_toilet'))
+    has_wifi_arg = bool(request.form.get('has_wifi'))
+    has_sockets_arg = bool(request.form.get('has_sockets'))
+    can_take_calls_arg = bool(request.form.get('can_take_calls'))
+    coffee_price_arg = request.form.get('coffee_price')
+
+    with app.app_context():
+
+        new_cafe = Cafe(
+            name=name_arg,map_url=map_url_arg,img_url=img_url_arg,
+            location=location_arg,seats=seats_arg,has_toilet=has_toilet_arg,
+            has_wifi=has_wifi_arg,has_sockets=has_sockets_arg,can_take_calls=can_take_calls_arg,
+            coffee_price=coffee_price_arg
+        )
+
+        try: 
+            db.session.add(new_cafe)
+
+            db.session.commit()
+
+        except Exception as ex:
+
+            db.session.close()
+
+            return jsonify(response={'failed':"Cannot add your cafe, check input values again.",'error':str(ex)})
+        
+        return jsonify(response={'success':"Successfully added the new cafe."})
 
 ## HTTP PUT/PATCH - Update Record
 
