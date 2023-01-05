@@ -145,7 +145,7 @@ def add():
 
             db.session.close()
 
-            return jsonify(response={'failed':"Cannot add your cafe, check input values again.",'error':str(ex)})
+            return jsonify(response={'error':"Cannot add your cafe, check input values again.",'error':str(ex)})
         
         return jsonify(response={'success':"Successfully added the new cafe."})
 
@@ -173,10 +173,50 @@ def patch(cafe_id):
 
     except Exception as ex:
 
-        return jsonify(response={'Not Found':"Cannot update the price of your cafe.",'error':str(ex)}),404
+        return jsonify(response={'Not Found':"Cannot update the price of your cafe.",'error_msg':str(ex)}),404
 
 ## HTTP DELETE - Delete Record
+@app.route('/report-closed/<int:cafe_id>',methods=['DELETE'])
+def delete(cafe_id:int):
 
+    #get api-key parameter 
+    USER_API_KEY = request.args.get('api-key',type=str)
+
+    API_KEY="secret"
+
+    #compare user key with authorize api key 
+    if USER_API_KEY == API_KEY:
+        
+        print(USER_API_KEY)
+        print(API_KEY)
+        #attempt to make delete request 
+        try:
+
+            #delete request
+            with app.app_context():
+
+                #locate record by id
+                cafe = db.session.query(Cafe).filter_by(id=cafe_id).first_or_404()
+
+                #delete cafe
+                db.session.delete(cafe)
+
+                #commit changes to db 
+                db.session.commit()
+
+                db.session.close()
+
+                #return success message
+                return jsonify(success={'Success':f"Successfully deleted the {cafe.name} cafe at {cafe.location} from the database."}),200
+
+        except Exception as ex:
+
+            return jsonify(response={'error':"Sorry cannot complete delete request on cafe record.",'error_msg':str(ex)}),404
+
+    else:
+
+        #Api key invalid 
+        return jsonify(response={'error':"Sorry that's not allowed. Make sure you have the correct api key."}),403
 
 if __name__ == '__main__':
     app.run(debug=True)
